@@ -173,9 +173,7 @@ export const CachedTreeView = ({
           <Button onClick={onApply} disabled={!tree}>
             Apply
           </Button>
-          <Button onClick={onReset} disabled={!tree}>
-            Reset
-          </Button>
+          <Button onClick={onReset}>Reset</Button>
         </CardActions>
       </Card>
       <AddOrEditNode

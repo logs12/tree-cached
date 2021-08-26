@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import cloneDeep from "lodash/cloneDeep";
-import { Type, classToClass } from "class-transformer";
+import { Type } from "class-transformer";
 
 export class TreeNode<T> {
   value: T;
@@ -96,6 +96,9 @@ export class Tree<T> {
     });
 
     if (parent != null) {
+      if (parent.isDelete) {
+        child.markAsDelete();
+      }
       parent.children.push(child);
       child.setParent(parentId);
     } else {
@@ -109,7 +112,7 @@ export class Tree<T> {
         node.markAsDelete();
         if (node.children.length) {
           node.children.forEach((child: TreeNode<T>) => {
-            child.markAsDelete();
+            this.remove(child.id);
           });
         }
       }
@@ -120,7 +123,7 @@ export class Tree<T> {
     let result = null;
     this.traverse((node: TreeNode<T>) => {
       if (node.id === nodeId) {
-        result = classToClass(node);
+        result = node;
       }
     });
     return result;
@@ -136,24 +139,6 @@ export class Tree<T> {
     return result;
   }
 
-  createTreeFromList(treeList: Array<TreeNode<T>>) {
-    treeList.forEach((newNode: TreeNode<T>) => {
-      if (!newNode.isNew) {
-        this.traverse((node: TreeNode<T>) => {
-          if (node.id === newNode.id) {
-            node.setValue(newNode.value);
-            node.setParent(newNode.parentId);
-            if (newNode.isDelete) {
-              node.markAsDelete();
-            }
-          }
-        });
-      } else {
-        this.addNewChildNode(newNode.value, newNode.parentId);
-      }
-    });
-  }
-
   clone() {
     return cloneDeep(this);
   }
@@ -166,8 +151,6 @@ export class CachedTree<T> extends Tree<T> {
       return;
     }
 
-    // delete child nodes
-    newNode.children.length = 0;
     let parent: any = null;
 
     if (newNode.parentId) {
@@ -182,6 +165,22 @@ export class CachedTree<T> extends Tree<T> {
         // if the parent is removed, delete the child
         if (parent.isDelete) {
           newNode.markAsDelete();
+        }
+        // select node with other Children
+        let nodeWithOtherChildren: any = null;
+        this.traverse((node: TreeNode<T>) => {
+          if (node.children.some((child) => child.parentId === newNode.id)) {
+            nodeWithOtherChildren = node;
+          }
+        });
+        if (nodeWithOtherChildren) {
+          newNode.children = nodeWithOtherChildren.children.filter(
+            (child: TreeNode<T>) => child.parentId === newNode.id
+          );
+          nodeWithOtherChildren.children =
+            nodeWithOtherChildren.children.filter(
+              (child: TreeNode<T>) => child.parentId !== newNode.id
+            );
         }
         parent.children.push(newNode);
       } else {

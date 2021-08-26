@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-import { Type, classToClass } from "class-transformer";
+import { Type } from "class-transformer";
+import { plainToClass } from "class-transformer";
 
 export class TreeNode<T> {
   value: T;
@@ -78,27 +79,18 @@ export class Tree<T> {
     });
   }
 
-  addNewChildNode(
-    value: T,
-    parentId: string,
-    isMarkAsNew: boolean = false
-  ): void {
-    const child: TreeNode<T> = new TreeNode(value);
-    if (isMarkAsNew) {
-      child.markAsNew();
-    }
+  addChildNode(newNode: TreeNode<T>): void {
     let parent: any = null;
     this.traverse((node: TreeNode<T>) => {
-      if (node.id === parentId) {
+      if (node.id === newNode.parentId) {
         parent = node;
       }
     });
 
     if (parent != null) {
-      parent.children.push(child);
-      child.setParent(parentId);
+      parent.children.push(newNode);
     } else {
-      this.root.children.push(child);
+      this.root.children.push(newNode);
     }
   }
 
@@ -108,7 +100,7 @@ export class Tree<T> {
         node.markAsDelete();
         if (node.children.length) {
           node.children.forEach((child: TreeNode<T>) => {
-            child.markAsDelete();
+            this.remove(child.id);
           });
         }
       }
@@ -119,13 +111,19 @@ export class Tree<T> {
     let result = null;
     this.traverse((node: TreeNode<T>) => {
       if (node.id === nodeId) {
-        result = classToClass(node);
+        result = node;
       }
     });
     return result;
   }
 
-  isChildAlreadyAdded(nodeId: string): boolean {
+  getNodeByIdWithoutChildren(nodeId: string): TreeNode<T> | null {
+    const resultNode = this.findNodeById(nodeId);
+    resultNode.children.length = 0;
+    return resultNode;
+  }
+
+  isNodeAlreadyAdded(nodeId: string): boolean {
     let result = false;
     this.traverse((node: TreeNode<T>) => {
       if (node.id === nodeId) {
@@ -137,18 +135,15 @@ export class Tree<T> {
 
   createTreeFromList(treeList: Array<TreeNode<T>>) {
     treeList.forEach((newNode: TreeNode<T>) => {
-      if (!newNode.isNew) {
-        this.traverse((node: TreeNode<T>) => {
-          if (node.id === newNode.id) {
-            node.setValue(newNode.value);
-            node.setParent(newNode.parentId);
-            if (newNode.isDelete) {
-              node.markAsDelete();
-            }
-          }
-        });
+      const childAlreadyAdded = this.findNodeById(newNode.id);
+      if (childAlreadyAdded) {
+        childAlreadyAdded.setValue(newNode.value);
+        childAlreadyAdded.setParent(newNode.parentId);
+        if (newNode.isDelete) {
+          this.remove(newNode.id);
+        }
       } else {
-        this.addNewChildNode(newNode.value, newNode.parentId);
+        this.addChildNode(plainToClass(TreeNode, newNode));
       }
     });
   }

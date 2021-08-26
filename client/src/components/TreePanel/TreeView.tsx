@@ -47,7 +47,7 @@ const RenderTree = ({
             treeNode.isDelete && classNameLabelAsDeleted
           )}
         >
-          {treeNode.value}
+          {treeNode.value} {treeNode.isDelete && "(del)"}
         </div>
       }
     >
@@ -76,7 +76,6 @@ export const TreeView = ({
 }) => {
   const classes = useTreeItemStyles();
   const handleSelect = (event: React.ChangeEvent<{}>, nodeId: string) => {
-    console.log("nodeIds = ", nodeId);
     onSelect(nodeId);
   };
   return (

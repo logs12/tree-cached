@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import "reflect-metadata";
 import { plainToClass } from "class-transformer";
 import { Tree } from "../models/Tree";
 import * as initTree from "../seeds/initTree.json";
@@ -17,7 +16,7 @@ export const getData = (req: Request, res: Response) => {
 export const getNode = (req: Request, res: Response) => {
   try {
     const treeData = plainToClass(Tree, tree);
-    const cachedNode = treeData.findNodeById(req.params.id);
+    const cachedNode = treeData.getNodeByIdWithoutChildren(req.params.id);
     res.send(cachedNode);
   } catch (error) {
     res.status(500).json({ error: error.toString() });

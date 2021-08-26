@@ -10,7 +10,43 @@
           {
             "value": "Node 4",
             "parentId": "bbfee4aa-8343-4cd8-aef5-5993f0e1b1ce",
-            "children": [],
+            "children": [
+              {
+                "value": "Node 12",
+                "parentId": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce8",
+                "children": [
+                  {
+                    "value": "Node 13",
+                    "parentId": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce81",
+                    "children": [
+                      {
+                        "value": "Node 14",
+                        "parentId": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce812",
+                        "children": [
+                          {
+                            "value": "Node 15",
+                            "parentId": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce8123",
+                            "children": [],
+                            "isDelete": false,
+                            "isNew": false,
+                            "id": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce81234"
+                          }
+                        ],
+                        "isDelete": false,
+                        "isNew": false,
+                        "id": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce8123"
+                      }
+                    ],
+                    "isDelete": false,
+                    "isNew": false,
+                    "id": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce812"
+                  }
+                ],
+                "isDelete": false,
+                "isNew": false,
+                "id": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce81"
+              }
+            ],
             "isDelete": false,
             "isNew": false,
             "id": "7569c2c7-c6c9-4c51-b61a-e5b9749a4ce8"
@@ -51,7 +87,52 @@
           {
             "value": "Node 8",
             "parentId": "d5433ea6-86a5-48f7-874e-fe813520ff9a",
-            "children": [],
+            "children": [
+              {
+                "value": "Node 16",
+                "parentId": "f2eddfe9-5511-43bd-9b32-9fa77782b62f",
+                "children": [
+                  {
+                    "value": "Node 17",
+                    "parentId": "f2eddfe9-5511-43bd-9b32-9fa77782b62f1",
+                    "children": [
+                      {
+                        "value": "Node 18",
+                        "parentId": "f2eddfe9-5511-43bd-9b32-9fa77782b62f12",
+                        "children": [
+                          {
+                            "value": "Node 19",
+                            "parentId": "f2eddfe9-5511-43bd-9b32-9fa77782b62f123",
+                            "children": [
+                              {
+                                "value": "Node 20",
+                                "parentId": "f2eddfe9-5511-43bd-9b32-9fa77782b62f1234",
+                                "children": [],
+                                "isDelete": false,
+                                "isNew": false,
+                                "id": "f2eddfe9-5511-43bd-9b32-9fa77782b62f12345"
+                              }
+                            ],
+                            "isDelete": false,
+                            "isNew": false,
+                            "id": "f2eddfe9-5511-43bd-9b32-9fa77782b62f1234"
+                          }
+                        ],
+                        "isDelete": false,
+                        "isNew": false,
+                        "id": "f2eddfe9-5511-43bd-9b32-9fa77782b62f123"
+                      }
+                    ],
+                    "isDelete": false,
+                    "isNew": false,
+                    "id": "f2eddfe9-5511-43bd-9b32-9fa77782b62f12"
+                  }
+                ],
+                "isDelete": false,
+                "isNew": false,
+                "id": "f2eddfe9-5511-43bd-9b32-9fa77782b62f1"
+              }
+            ],
             "isDelete": false,
             "isNew": false,
             "id": "f2eddfe9-5511-43bd-9b32-9fa77782b62f"

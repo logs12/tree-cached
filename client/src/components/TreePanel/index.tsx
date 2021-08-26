@@ -55,9 +55,9 @@ function TreePanel() {
   const [selectedIdCachedNodeTree, setSelectedIdCachedNodeTree] =
     useState<string>("");
   const [cachedTree, setCachedTree] = useState<{
-    tree: CachedTree<string> | null;
+    tree: CachedTree<string>;
   }>({
-    tree: null
+    tree: new CachedTree("root")
   });
   const [dbTree, setDbTree] = useState<Tree<string> | null>(null);
 
@@ -82,7 +82,7 @@ function TreePanel() {
       setIsLoading(true);
       const result = await getNode(selectedDbNodeTree);
       if (result.status === 200) {
-        let tree = cachedTree.tree ? cachedTree.tree : new CachedTree("root");
+        let tree = cachedTree.tree;
         tree.addChildNode(plainToClass(TreeNode, result.data));
         setCachedTree({ tree });
       }
@@ -123,7 +123,7 @@ function TreePanel() {
         setDbTree(tree);
         setSelectedDbNodeTree("");
         setSelectedIdCachedNodeTree("");
-        setCachedTree({ tree: null });
+        setCachedTree({ tree: new CachedTree("root") });
       }
     }
     setIsLoading(false);

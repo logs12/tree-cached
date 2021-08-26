@@ -153,60 +153,52 @@ export class CachedTree<T> extends Tree<T> {
 
     let parent: any = null;
 
-    if (newNode.parentId) {
-      // looking for parent nodes
+    // looking for parent nodes
+    this.traverse((node: TreeNode<T>) => {
+      if (node.id === newNode.parentId) {
+        parent = node;
+      }
+    });
+
+    if (parent != null) {
+      // if the parent is removed, delete the child
+      if (parent.isDelete) {
+        newNode.markAsDelete();
+      }
+      // select node with other Children
+      let nodeWithOtherChildren: any = null;
       this.traverse((node: TreeNode<T>) => {
-        if (node.id === newNode.parentId) {
-          parent = node;
+        if (node.children.some((child) => child.parentId === newNode.id)) {
+          nodeWithOtherChildren = node;
         }
       });
-
-      if (parent != null) {
-        // if the parent is removed, delete the child
-        if (parent.isDelete) {
-          newNode.markAsDelete();
-        }
-        // select node with other Children
-        let nodeWithOtherChildren: any = null;
-        this.traverse((node: TreeNode<T>) => {
-          if (node.children.some((child) => child.parentId === newNode.id)) {
-            nodeWithOtherChildren = node;
-          }
-        });
-        if (nodeWithOtherChildren) {
-          newNode.children = nodeWithOtherChildren.children.filter(
-            (child: TreeNode<T>) => child.parentId === newNode.id
-          );
-          nodeWithOtherChildren.children =
-            nodeWithOtherChildren.children.filter(
-              (child: TreeNode<T>) => child.parentId !== newNode.id
-            );
-        }
-        parent.children.push(newNode);
-      } else {
-        let children: Array<TreeNode<T>> = [];
-
-        // collecting child nodes for the node you want to add
-        this.traverse((node: TreeNode<T>) => {
-          if (node.parentId === newNode.id) {
-            children.push(node);
-          }
-        });
-        // filtering child nodes of the tree from repetitions
-        children.forEach((newChild) => {
-          this.traverse((node: TreeNode<T>) => {
-            node.children = node.children.filter(
-              (nodeChild) => nodeChild.id !== newChild.id
-            );
-          });
-        });
-        newNode.children = children;
-        this.root.children.push(newNode);
+      if (nodeWithOtherChildren) {
+        newNode.children = nodeWithOtherChildren.children.filter(
+          (child: TreeNode<T>) => child.parentId === newNode.id
+        );
+        nodeWithOtherChildren.children = nodeWithOtherChildren.children.filter(
+          (child: TreeNode<T>) => child.parentId !== newNode.id
+        );
       }
+      parent.children.push(newNode);
     } else {
-      newNode.children = cloneDeep(this.root.children);
+      let children: Array<TreeNode<T>> = [];
 
-      this.root.children.length = 0;
+      // collecting child nodes for the node you want to add
+      this.traverse((node: TreeNode<T>) => {
+        if (node.parentId === newNode.id) {
+          children.push(node);
+        }
+      });
+      // filtering child nodes of the tree from repetitions
+      children.forEach((newChild) => {
+        this.traverse((node: TreeNode<T>) => {
+          node.children = node.children.filter(
+            (nodeChild) => nodeChild.id !== newChild.id
+          );
+        });
+      });
+      newNode.children = children;
       this.root.children.push(newNode);
     }
   }

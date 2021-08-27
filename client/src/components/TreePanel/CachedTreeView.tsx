@@ -156,7 +156,7 @@ export const CachedTreeView = ({
             aria-label="remove"
             className={classes.downBarButton}
             size="small"
-            disabled={!selectedNodeId}
+            disabled={!selectedNodeId || selectedNode?.isDelete}
           >
             <Remove fontSize="inherit" />
           </IconButton>

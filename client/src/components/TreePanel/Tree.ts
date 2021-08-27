@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import cloneDeep from "lodash/cloneDeep";
-import { Type } from "class-transformer";
+import { Type, plainToClass } from "class-transformer"; 
 
 export class TreeNode<T> {
   value: T;
@@ -79,6 +79,21 @@ export class Tree<T> {
     });
   }
 
+  addChildNode(newNode: TreeNode<T>): void {
+    let parent: any = null;
+    this.traverse((node: TreeNode<T>) => {
+      if (node.id === newNode.parentId) {
+        parent = node;
+      }
+    });
+
+    if (parent != null) {
+      parent.children.push(newNode);
+    } else {
+      this.root.children.push(newNode);
+    }
+  }
+
   addNewChildNode(
     value: T,
     parentId: string,
@@ -137,6 +152,21 @@ export class Tree<T> {
       }
     });
     return result;
+  }
+
+  createTreeFromList(treeList: Array<TreeNode<T>>) {
+    treeList.forEach((newNode: TreeNode<T>) => {
+      const childAlreadyAdded = this.findNodeById(newNode.id);
+      if (childAlreadyAdded) {
+        childAlreadyAdded.setValue(newNode.value);
+        childAlreadyAdded.setParent(newNode.parentId);
+        if (newNode.isDelete) {
+          this.remove(newNode.id);
+        }
+      } else {
+        this.addChildNode(plainToClass(TreeNode, newNode));
+      }
+    });
   }
 
   clone() {

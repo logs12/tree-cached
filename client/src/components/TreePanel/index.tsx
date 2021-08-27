@@ -105,10 +105,12 @@ function TreePanel() {
         convertTreeToList(cachedTree.tree.root.children)
       );
       if (result.status === 200) {
-        const tree = plainToClass(Tree, result.data);
+        const tree = plainToClass(Tree, result.data.tree);
         if (tree) {
           setDbTree(tree);
         }
+        cachedTree.tree.createTreeFromList(result.data.newCachedNodeList);
+        setCachedTree({ tree: cachedTree.tree });
       }
     }
     setIsLoading(false);

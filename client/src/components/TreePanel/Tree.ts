@@ -161,10 +161,6 @@ export class CachedTree<T> extends Tree<T> {
     });
 
     if (parent != null) {
-      // if the parent is removed, delete the child
-      if (parent.isDelete) {
-        newNode.markAsDelete();
-      }
       // select node with other Children
       let nodeWithOtherChildren: any = null;
       this.traverse((node: TreeNode<T>) => {
@@ -181,6 +177,10 @@ export class CachedTree<T> extends Tree<T> {
         );
       }
       parent.children.push(newNode);
+      // if the parent is removed, delete the child
+      if (parent.isDelete) {
+        this.remove(newNode.id);
+      }
     } else {
       let children: Array<TreeNode<T>> = [];
 

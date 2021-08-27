@@ -147,7 +147,7 @@ export const CachedTreeView = ({
             aria-label="add"
             className={classes.downBarButton}
             size="small"
-            disabled={!selectedNodeId}
+            disabled={!selectedNodeId || selectedNode?.isDelete}
           >
             <Add fontSize="inherit" />
           </IconButton>
@@ -165,7 +165,7 @@ export const CachedTreeView = ({
             aria-label="edit"
             className={classes.downBarButton}
             size="small"
-            disabled={!selectedNodeId}
+            disabled={!selectedNodeId || selectedNode?.isDelete}
           >
             <Edit fontSize="inherit" />
           </IconButton>
